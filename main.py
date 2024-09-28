@@ -108,7 +108,7 @@ def iniciar_sesion(cuit_ingresar, password, row_index):
         actualizar_excel(row_index, "Error al iniciar sesión")
         return False
 
-def ingresar_modulo(cuit_ingresar, password):
+def ingresar_modulo(cuit_ingresar, password, row_index):
     """Ingresa al módulo específico del sistema de cuentas tributarias."""
     try:
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.LINK_TEXT, "Ver todos"))).click()
@@ -139,6 +139,7 @@ def ingresar_modulo(cuit_ingresar, password):
         try:
             error_message = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, 'pre')))
             if error_message.text == "Ha ocurrido un error al autenticar, intente nuevamente.":
+                actualizar_excel(row_index, "Error autenticacion")
                 driver.refresh()
                 time.sleep(5)
         except:
@@ -159,6 +160,8 @@ def ingresar_modulo(cuit_ingresar, password):
             time.sleep(15)
             driver.find_element(By.ID, 'F1:btnIngresar').click()
             time.sleep(5)
+
+            actualizar_excel(row_index, "Error volver a iniciar sesion")
         except:
             pass
 
