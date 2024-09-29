@@ -241,7 +241,7 @@ def extraer_datos_nuevo(cuit_ingresar, cuit_representado, password, ubicacion_de
     try:
         control_sesion = iniciar_sesion(cuit_ingresar, password, indice)
         if control_sesion:
-            ingresar_modulo(cuit_ingresar, password)
+            ingresar_modulo(cuit_ingresar, password, indice)
             # Esperar que el popup esté visible y hacer clic en el botón de cerrar por XPATH
             try:
                 # Usamos el XPATH para localizar el botón de cerrar
