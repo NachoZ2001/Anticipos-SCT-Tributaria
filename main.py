@@ -19,14 +19,10 @@ import xlwings as xw
 import pdfkit
 
 # Definir rutas a las carpetas y archivos
-input_folder_excel = "C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/input/Deudas"
-output_folder_csv = "C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/input/DeudasCSV"
-output_file_csv = "C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/Resumen_deudas.csv"
-output_file_xlsx = "C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/Resumen_deudas.xlsx"
-fecha_especifica = '2024-03-31'
+input_folder_excel = "C:/Proyectos/-Impuestos/Anticipos-SCT-Tributaria/data/input"
 
 # Leer el archivo Excel
-df = pd.read_excel(r'C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/input/Clientes.xlsx')
+df = pd.read_excel(r'C:/Proyectos/-Impuestos/Anticipos-SCT-Tributaria/data/input/Clientes.xlsx')
 
 # Suposición de nombres de columnas
 cuit_login_list = df['CUIT para ingresar'].tolist()
@@ -64,7 +60,7 @@ def human_typing(element, text):
 def actualizar_excel(row_index, mensaje):
     """Actualiza la última columna del archivo Excel con un mensaje de error."""
     df.at[row_index, 'Error'] = mensaje
-    df.to_excel(r'C:/Program Files/Sublime Merge/Descarga-SCT-Envio-Mails-Masivos/data/input/clientes.xlsx', index=False)
+    df.to_excel(r'C:/Proyectos/-Impuestos/Anticipos-SCT-Tributaria/data/input/Clientes.xlsx', index=False)
 
 def iniciar_sesion(cuit_ingresar, password, row_index):
     """Inicia sesión en el sitio web con el CUIT y contraseña proporcionados."""
@@ -115,7 +111,7 @@ def ingresar_modulo(cuit_ingresar, password, row_index):
         time.sleep(5)
 
         element = driver.find_element(By.ID, 'buscadorInput')
-        human_typing(element, 'Sistema de Cuentas Tributarias') 
+        human_typing(element, 'tas tr') 
         time.sleep(5)
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'rbt-menu-item-0'))).click()
         time.sleep(10)
@@ -241,7 +237,6 @@ def extraer_datos_nuevo(cuit_ingresar, cuit_representado, password, ubicacion_de
     try:
         control_sesion = iniciar_sesion(cuit_ingresar, password, indice)
         if control_sesion:
-            ingresar_modulo(cuit_ingresar, password)
             ingresar_modulo(cuit_ingresar, password, indice)
             # Esperar que el popup esté visible y hacer clic en el botón de cerrar por XPATH
             try:
@@ -317,8 +312,8 @@ for cuit_ingresar, cuit_representado, password, download, posterior, anterior, c
         extraer_datos(cuit_representado, download, posterior, cliente)
     indice = indice + 1
 
-output_folder_pdf = "C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/Reportes"
-imagen = "C:/Proyectos/Descarga-SCT-Envio-Mails-Masivos/data/imagen.png"
+output_folder_pdf = "C:/Proyectos/-Impuestos/ANTICIPOS-SCT-TRIBUTARIA/data/Reportes"
+imagen = "C:/Proyectos/-Impuestos/ANTICIPOS-SCT-TRIBUTARIA/data/imagen.png"
 
 def forzar_guardado_excel(excel_file):
     app = xw.App(visible=False)
@@ -333,7 +328,7 @@ def procesar_excel(excel_file, output_pdf, imagen):
 
     # Filtrar por "Periodo fiscal" y "Impuesto"
     df_filtrado = df[
-        (df['Período Fiscal'].astype(str).str.contains('2024')) & 
+        (df['Período Fiscal'].astype(str).str.contains('2025')) & 
         (df['Impuesto'].str.contains('ganancias personas físicas|ganancias personas fisicas|bienes personales', case=False, na=False))
     ]
 
